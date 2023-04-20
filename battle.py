@@ -51,12 +51,31 @@ class Battle:
             print('----------------------------------')
             print('')
 
+    def battle_by_steps(self):
+        i = self.get_turns()
+        coins1 = self.bot1.get_player_coins()
+        coins2 = self.bot2.get_player_coins()
+        action1 = self.bot1.action()
+        action2 = self.bot2.action()
+        self.record[0][i] = action1
+        self.record[1][i] = action2
+        self.bot1.record = self.record
+        self.bot2.record = self.record[::-1]
+        self.bot1.coins = self.bot1.get_player_coins()
+        self.bot2.coins = self.bot2.get_player_coins()
+        coins_change1 = self.bot1.get_player_coins() - coins1
+        coins_change2 = self.bot2.get_player_coins() - coins2
+        return coins_change1, coins_change2
+
     def reset(self):
         self.bot1.reset()
         self.bot2.reset()
-        self.record = []
+        self.record = [[0 for _ in range(self.rounds)], [0 for _ in range(self.rounds)]]
+
+    def get_turns(self) -> int:
+        return self.record[0].index(0)
 
 
 if __name__ == '__main__':
-    battle = Battle(bots.Snobbish(), bots.Compare())
+    battle = Battle(bots.Randomizer(), bots.Rocket())
     battle.combat()
