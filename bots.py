@@ -15,22 +15,25 @@ class Bot:
 
     def __str__(self):
         return self.name
-
-    def get_turns(self) -> int:
+    
+    @property
+    def turns(self) -> int:
         """
         Get the number of turns that have passed
         获取已经过去的回合数
         """
         return self.record[0].index(0)
-
-    def get_player_coins(self) -> int:
+    
+    @property
+    def player_coins(self) -> int:
         """
         Get the number of coins the player has
         获取玩家拥有的金币数
         """
         return 10 - self.record[0].count(1) + self.record[1].count(1) * 3
 
-    def get_opponent_coins(self) -> int:
+    @property
+    def opponent_coins(self) -> int:
         """
         Get the number of coins the opponent has
         获取对手拥有的金币数
@@ -57,12 +60,12 @@ class Imitator(Bot):
         super().__init__(name + number, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
-            return self.record[1][self.get_turns() - 1]
+            return self.record[1][self.turns - 1]
 
 
 class Randomizer(Bot):
@@ -118,9 +121,9 @@ class Speculator(Bot):
         super().__init__(name + number, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         elif -1 in self.record[1]:
             return -1
@@ -138,9 +141,9 @@ class Perception(Bot):
         super().__init__(name + number, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
             return self.record[1][0]
@@ -156,12 +159,12 @@ class Reverser(Bot):
         super().__init__(name + number, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
-            return -self.record[1][self.get_turns() - 1]
+            return -self.record[1][self.turns - 1]
 
 
 class Merlin(Bot):
@@ -174,9 +177,9 @@ class Merlin(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_player_coins() >= 10:
+        if self.player_coins >= 10:
             return 1
         else:
             return -1
@@ -192,9 +195,9 @@ class Why(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
             return self.record[1][0]
@@ -205,7 +208,7 @@ class Why(Bot):
         获取对手的信任值
         """
         trust = 1
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 0:
             return 1
         else:
@@ -229,13 +232,13 @@ class Holmes(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
             if self.record[1].count(-1) < 2:
-                return self.record[1][self.get_turns() - 1]
+                return self.record[1][self.turns - 1]
             else:
                 return -1
 
@@ -250,7 +253,7 @@ class White(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if turns == 0:
@@ -274,7 +277,7 @@ class Planner(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if self.record[1].count(-1) >= 2:
@@ -306,7 +309,7 @@ class Revenge(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if turns == 0:
@@ -330,9 +333,9 @@ class Compare(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_player_coins() < self.get_opponent_coins():
+        if self.player_coins < self.opponent_coins:
             return -1
         else:
             return 1
@@ -348,9 +351,9 @@ class Snobbish(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_player_coins() > self.get_opponent_coins():
+        if self.player_coins > self.opponent_coins:
             return -1
         else:
             return 1
@@ -367,14 +370,14 @@ class Nico(Bot):
         self.flag = 0
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if turns < 4:
             self.flag = 0
             return 1
         elif turns == 4:
-            self.flag = self.get_player_coins() > 10
+            self.flag = self.player_coins > 10
             return 1 if self.flag else -1
         else:
             return 1 if self.flag else -1
@@ -390,12 +393,12 @@ class Analyst(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        if self.get_turns() == 0:
+        if self.turns == 0:
             return 1
         else:
-            return 1 if self.record[1].count(1) / self.get_turns() > 0.6 else -1
+            return 1 if self.record[1].count(1) / self.turns > 0.6 else -1
 
 
 class Rocket(Bot):
@@ -422,9 +425,9 @@ class Rice(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        if self.get_turns() == 9:
+        if self.turns == 9:
             return -1
-        return 1 if self.get_opponent_coins() % 2 == 0 else -1
+        return 1 if self.opponent_coins % 2 == 0 else -1
 
 
 class Sword(Bot):
@@ -437,7 +440,7 @@ class Sword(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if turns == 0:
@@ -459,7 +462,7 @@ class AV4k(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns == 9:
             return -1
         if turns == 0:
@@ -468,7 +471,7 @@ class AV4k(Bot):
             if turns % 2 == 0:
                 return self.record[1][turns - 1]
             else:
-                if self.get_player_coins() > 10:
+                if self.player_coins > 10:
                     return 1
                 else:
                     return -1
@@ -483,7 +486,7 @@ class Hypocrite(Bot):
         super().__init__(name + number, emoji=emoji, rounds=rounds)
 
     def action(self) -> int:
-        turns = self.get_turns()
+        turns = self.turns
         if turns >= 8:
             return -1
         if turns == 0:
