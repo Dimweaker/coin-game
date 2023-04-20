@@ -13,6 +13,9 @@ class Bot:
         self.record = [[0 for _ in range(rounds)], [0 for _ in range(rounds)]]
         self.coins = rounds
 
+    def __str__(self):
+        return self.name
+
     def get_turns(self) -> int:
         """
         Get the number of turns that have passed
