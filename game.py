@@ -49,7 +49,7 @@ class Game:
 if __name__ == '__main__':
     bots_list = [bots.Imitator, bots.Selfish, bots.Randomizer, bots.Nice, bots.Speculator, bots.Perception,
                  bots.Reverser,  bots.Why, bots.Holmes,  bots.Analyst, bots.Luck, bots.Compare, bots.Snobbish,
-                 bots.Revenge, bots.Nico]
+                 bots.Revenge, bots.Nico, bots.Rocket, bots.Merlin, bots.White, bots.Rice, bots.Sword, bots.AV4k, bots.Hypocrite]
     game = Game(bots_list)
     game.match(rounds_per_game=10)
     game.play(rounds_per_game=10, games=100)
